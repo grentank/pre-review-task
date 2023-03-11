@@ -1,0 +1,30 @@
+{
+  "name": "pre-review-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test-part-1": "jest part-1/spec/*[sS]pec.js -i",
+    "test-part-2": "jest part-2/spec/*[sS]pec.js -i",
+    "test-part-3": "jest part-3/spec/*[sS]pec.js -i",
+    "test": "npm run test-part-1 && npm run test-part-2 && npm run test-part-3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grentank/pre-review-task.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grentank/pre-review-task/issues"
+  },
+  "homepage": "https://github.com/grentank/pre-review-task#readme",
+  "devDependencies": {
+    "eslint": "^8.36.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.27.5",
+    "jest": "^29.5.0"
+  }
+}
