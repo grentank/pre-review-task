@@ -1,10 +1,11 @@
+const fs = require('fs/promises');
 const fetchUsers = require('./fetchUsers');
 
-async function fetchNames() {}
+function fetchNames() {}
 
-async function saveNames() {}
+function saveNames(names) {}
 
-async function getName() {}
+function getName(count) {}
 
 module.exports = {
   fetchNames,

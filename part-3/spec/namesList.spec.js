@@ -1,152 +1,76 @@
+const fs = require('fs/promises');
+const { fetchNames, saveNames, getName } = require('../namesList');
 
-describe("main", () => {
-    let filmProject;
-    let director;
-    let actor1;
-    let actor2;
-    let actors;
+describe('part3', () => {
+  let fileData;
+  beforeEach(async () => {
+    await fs.writeFile('./names.txt', '', 'utf8');
+  });
 
-    describe('attributes', () => {
-        beforeEach(() => {
-            // Подготовка переменных.
-
-            director = new Director();
-            actor1 = new Actor({
-                salary: 100
-            });
-            actor2 = new Actor({
-                salary: 100
-            });
-            actors = [actor1, actor2];
-            
-            filmProject = new FilmProject({
-                title: 'Movie 1',
-                director: director,
-                cast: actors,
-                castingBudget: 3500000,
-            });
-        });
-
-        it('У FilmProject есть `title`', () => {
-            expect(filmProject.title).toEqual('Movie 1');
-        });
-        it('Свойство `title` можно изменять', () => {
-            filmProject.title = 'Movie 2'
-            expect(filmProject.title).toEqual('Movie 2');
-        });
-        it('У FilmProject есть `director`', () => {
-            expect(filmProject.director).toEqual(director);
-        });
-
-        it('Свойство `director` можно изменять', () => {
-            const newDirector = new Director();
-            expect(filmProject.director).toEqual(director);
-
-            filmProject.director = newDirector;
-            expect(filmProject.director).toEqual(newDirector);
-        });
-        it('У FilmProject есть `cast`(Актёрский состав)', () => {
-            expect(filmProject.cast).toBe(actors);
-        });
-        it('У FilmProject есть `castingBudget`', () => {
-            expect(filmProject.castingBudget).toEqual(3500000);
-        });
+  describe('fetchNames', () => {
+    it('возвращает промис', async () => {
+      const promise = fetchNames();
+      expect(promise.toString()).toBe('[object Promise]');
+      await promise;
     });
 
-    describe('Взаимодействие с `cast`', () => {
-        describe('Оставшийся бюджет', () => {
-            beforeEach(() => {
-
-                actor1 = new Actor({
-                    salary: 1000000
-                });
-                actor2 = new Actor({
-                    salary: 1250000
-                });
-                filmProject = new FilmProject({
-                    cast: [actor1, actor2],
-                    castingBudget: 2500000,
-                });
-            });
-            it('Подсчитывает оставшийся бюджет после выплаты зарплат актерам(`cast`)', () => {
-                expect(filmProject.remainingBudget()).toEqual(250000);
-            });
-            it('castingBudget не изменяется после выплат', () => {
-                expect(filmProject.castingBudget).toEqual(2500000);
-                filmProject.remainingBudget()
-                expect(filmProject.castingBudget).toEqual(2500000);
-            });
-        });
+    it('промис резолвится в массив строк', async () => {
+      const names = await fetchNames();
+      expect(Array.isArray(names)).toBe(true);
+      expect(names.every((name) => typeof name === 'string')).toBe(true);
     });
 
-    describe('Добавление актера', () => {
-        let castActor;
-        let affordableActor;
-        let unaffordableActor;
-        let filmProject;
+    it('промис резолвится в массив строк с именами из fetchUsers', async () => {
+      const names = await fetchNames();
+      expect(names).toEqual(
+        expect.arrayContaining(['Ervin Howell', 'Mrs. Dennis Schulist', 'Clementina DuBuque']),
+      );
+      expect(names).toEqual(expect.arrayContaining(['Patricia Lebsack', 'Glenna Reichert']));
+      expect(names).toHaveLength(10);
+    });
+  });
 
-        beforeEach(() => {
-            castActor = new Actor({
-                salary: 0,
-            });
-            affordableActor = new Actor({
-                salary: 1000000,
-            });
-            unaffordableActor = new Actor({
-                salary: 999999999999,
-            })
-            filmProject = new FilmProject({
-                cast: [castActor],
-                castingBudget: 1000000,
-            });
-        })
-
-        it('Добавляет актера в свойство `cast` (массив)', () => {
-            expect(filmProject.cast).toEqual([castActor]);
-            filmProject.addActor(affordableActor);
-            expect(filmProject.cast).toEqual([castActor, affordableActor]);
-        });
-        it('addActor возвращает true', () => {
-            expect(filmProject.addActor(affordableActor)).toBeTruthy();
-        });
-        it('Слишком дорогой актер не будет добавлен в `cast`', () => {
-            expect(filmProject.cast).toEqual([castActor]);
-            filmProject.addActor(unaffordableActor);
-            expect(filmProject.cast).toEqual([castActor]);
-        });
-        it('addActor возвращает false', () => {
-            expect(filmProject.addActor(unaffordableActor)).toBeFalsy();
-        });
+  describe('saveNames', () => {
+    it('возвращает промис', async () => {
+      const promise = saveNames([]);
+      expect(promise.toString()).toBe('[object Promise]');
+      await promise;
     });
 
-    describe('Топ актёров', () => {
-        it('Возвращает актёров из актерского состава, рейтинг популярности которых >8', () => {
-            const headliner1 = new Actor({
-                popularityRating: 10,
-            });
-            const headliner2 = new Actor({
-                popularityRating: 9,
-            });
-            const almostHeadliner = new Actor({
-                popularityRating: 8,
-            });
-            const unpopularActor = new Actor({
-                popularityRating: 2,
-            });
-            const filmProject = new FilmProject({
-                cast: [
-                    almostHeadliner,
-                    headliner1,
-                    unpopularActor,
-                    headliner2,
-                ],
-            });
-
-            expect(filmProject.headliners()).toEqual([
-                headliner1,
-                headliner2,
-            ]);
-        });
+    it('после резолва промиса массив строк записан в файл', async () => {
+      await saveNames(['Alice', 'Bob', 'Charlie']);
+      fileData = await fs.readFile('./names.txt', 'utf8');
+      expect(fileData).toEqual(expect.stringContaining('Alice\n'));
+      expect(fileData).toEqual(expect.stringContaining('\nBob\n'));
+      expect(fileData).toHaveLength(17);
     });
 
+    it('метод работает корректно', async () => {
+      await saveNames(await fetchNames());
+      fileData = await fs.readFile('./names.txt', 'utf8');
+      expect(fileData).toEqual(expect.stringContaining('\nPatricia Lebsack\n'));
+      expect(fileData).toEqual(expect.stringContaining('\nKurtis Weissnat\n'));
+      expect(fileData).toHaveLength(174);
+    });
+  });
+
+  describe('getName', () => {
+    it('возвращает промис', async () => {
+      const promise = getName([]);
+      expect(promise.toString()).toBe('[object Promise]');
+      await promise;
+    });
+
+    it('промис резолвится в нужное имя из файла', async () => {
+      await fs.writeFile('./names.txt', 'Bob\nBeb\nBib\nBub\nBab', 'utf8');
+      expect(await getName(3)).toEqual('Bib');
+      expect(await getName(4)).toEqual('Bub');
+    });
+
+    it('метод работает корректно', async () => {
+      await saveNames(await fetchNames());
+      expect(await getName(3)).toEqual('Clementine Bauch');
+      expect(await getName(9)).toEqual('Glenna Reichert');
+    });
+  });
 });
