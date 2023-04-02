@@ -1,11 +1,26 @@
 const fs = require('fs/promises');
 const fetchUsers = require('./fetchUsers');
 
-function fetchNames() {}
+async function fetchNames() {
+  const users = await fetchUsers();
+  const names = users.map((element) => element.name);
+  return new Promise((resolve, reject) => {
+    if (names) {
+      resolve(names);
+    } else {
+      reject('Error');
+    }
+  });
+}
 
-function saveNames(names) {}
+async function saveNames(names) {
+  const namesString = names.join('\n');
+  await fs.writeFile('./names.txt', namesString, 'utf-8');
+}
 
-function getName(count) {}
+async function getName(count) {
+  return (await fs.readFile('./names.txt', 'utf-8')).split('\n')[count - 1];
+}
 
 module.exports = {
   fetchNames,
