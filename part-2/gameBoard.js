@@ -21,7 +21,7 @@ class GameBoard {
       const terrainRes = terrain[journey[i][0]][journey[i][1]];
       result += this.terrainHelper.scoreDifficulty(terrainRes);
     }
-    return result
+    return result;
   }
 }
 module.exports = GameBoard;
