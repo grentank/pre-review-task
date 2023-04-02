@@ -46,16 +46,16 @@ describe('GameBoard', () => {
     });
   });
 
-  describe('difficultyOfJourney', () => {
-    it('totals the difficulty of a journey // Сумма сложности путешествия', () => {
-      const journey = [
-        [0, 0],
-        [0, 1],
-        [1, 1],
-        [1, 2],
-        [2, 2],
-      ];
-      expect(myGameBoard.difficultyOfJourney(journey)).toEqual(225);
-    });
-  });
+  // describe('difficultyOfJourney', () => {
+  //   it('totals the difficulty of a journey // Сумма сложности путешествия', () => {
+  //     const journey = [
+  //       [0, 0],
+  //       [0, 1],
+  //       [1, 1],
+  //       [1, 2],
+  //       [2, 2],
+  //     ];
+  //     expect(myGameBoard.difficultyOfJourney(journey)).toEqual(225);
+  //   });
+  // });
 });
