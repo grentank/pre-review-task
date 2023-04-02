@@ -1,11 +1,20 @@
 const fs = require('fs/promises');
 const fetchUsers = require('./fetchUsers');
 
-function fetchNames() {}
+function fetchNames() {
+  return fetchUsers().then((data) => data.map((el) => el.name));
+}
 
-function saveNames(names) {}
+async function saveNames(names) {
+  await fs.writeFile('./names.txt', names.join('\n'), 'utf8');
+}
 
-function getName(count) {}
+async function getName(count) {
+  return fs
+    .readFile('./names.txt', 'utf-8')
+    .then((name) => name.split('\n'))
+    .then((el) => el[count - 1]);
+}
 
 module.exports = {
   fetchNames,

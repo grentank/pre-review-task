@@ -36,6 +36,10 @@ class TerrainHelper {
         );
     }
   }
+
+  funcTest() {
+    console.log('testfunction 122432423');
+  }
 }
 
 module.exports = TerrainHelper;
