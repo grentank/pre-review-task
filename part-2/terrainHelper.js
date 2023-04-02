@@ -1,4 +1,4 @@
-class TerrainHelper {
+ class TerrainHelper {
   scoreDifficulty(terrainType) {
     switch (terrainType) {
       case 'water':
