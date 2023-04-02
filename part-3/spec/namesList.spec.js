@@ -63,6 +63,7 @@ describe('part3', () => {
 
     it('промис резолвится в нужное имя из файла', async () => {
       await fs.writeFile('./names.txt', 'Bob\nBeb\nBib\nBub\nBab', 'utf8');
+      //тут я так и не понял обязательно ли в fs писать калбек или можно просто await
       expect(await getName(3)).toEqual('Bib');
       expect(await getName(4)).toEqual('Bub');
     });
