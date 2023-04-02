@@ -4,6 +4,10 @@ class Actor {
     this.popularityRating = args.popularityRating || 0;
     this.salary = args.salary || 0;
   }
+
+  getSalary() {
+    return this.salary;
+  }
 }
 
 module.exports = Actor;
